@@ -49,3 +49,23 @@ const data = [{
 ];
 
 console.log(getDataByParentId(data, null));
+
+
+
+//Solution 2
+
+let dataMap = data.reduce((m, d) => {
+  m[d.dataId] = Object.assign({}, d);
+  return m;
+}, {});
+
+const trees = data.filter(d => {
+  if (d.parentId !== null) { // assign child to its parent
+    let parentNode = dataMap[d.parentId];
+    if (!('children' in parentNode)) parentNode['children'] = [];
+    parentNode.children.push(dataMap[d.dataId]);
+    return false;
+  }
+  return true; // root node, do nothing
+}).map(d => dataMap[d.dataId]);
+
